@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AM Premium — MAMZz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #a855f7;
+      --purple-dark: #7e22ce;
+      --purple-deep: #3b0764;
+      --neon: #c084fc;
+      --neon-strong: #e879f9;
+      --pink: #f0abfc;
+      --cyan: #22d3ee;
+      --yellow: #f5b82e;
+      --black: #05010f;
+      --bg-dark: #0a0118;
+      --white: #ffffff;
+      --grid: rgba(168, 85, 247, 0.15);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: 'Rajdhani', 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #05010f;
+      color: var(--white);
+      padding-bottom: 120px;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: center center;
+      z-index: 0;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.25), transparent 60%),
+        radial-gradient(circle at 0% 100%, rgba(232, 121, 249, 0.15), transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(34, 211, 238, 0.1), transparent 50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .scanlines {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+    }
+    .page, .bottom-nav, .home-welcome-pill { position: relative; z-index: 2; }
+    .font-anton { font-family: 'Anton', sans-serif; letter-spacing: 1px; }
+    .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+    .font-rajdhani { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: 1px; }
+
+    /* === TITLE HUD === */
+.title-pill {
+  position: relative;
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.25), rgba(59, 7, 100, 0.5));
+  border: 1px solid var(--neon);
+  border-radius: 4px;
+  padding: 14px 40px;
+  text-align: center;
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.8),
+    0 0 40px rgba(168, 85, 247, 0.4),
+    inset 0 0 20px rgba(168, 85, 247, 0.15);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+.title-pill::before,
+.title-pill::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--neon-strong);
+  box-shadow: 0 0 10px var(--neon-strong);
+}
+.title-pill::before { top: 4px; left: 4px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.title-pill::after { bottom: 4px; right: 4px; clip-path: polygon(100% 100%, 0 100%, 100% 0); }
+.title-pill h1 {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-shadow:
+    0 0 10px var(--neon-strong),
+    0 0 20px var(--neon),
+    0 0 30px var(--purple);
+  margin: 0;
+}
+
+/* === CYBER CARDS === */
+.comic-card-purple,
+.comic-card-white {
+  position: relative;
+  background: linear-gradient(135deg, rgba(20, 8, 40, 0.85), rgba(10, 1, 24, 0.95));
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 30px rgba(168, 85, 247, 0.2),
+    inset 0 1px 0 rgba(168, 85, 247, 0.2);
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+.comic-card-purple {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow:
+    0 0 40px rgba(168, 85, 247, 0.35),
+    inset 0 1px 0 rgba(232, 121, 249, 0.3);
+}
+.comic-card-purple::before,
+.comic-card-white::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px; height: 2px;
+  background: var(--neon-strong);
+  box-shadow: 0 0 10px var(--neon-strong);
+}
+.comic-card-purple::after,
+.comic-card-white::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 40px; height: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+/* === NEON TECH BUTTON === */
+.btn-yellow-comic {
+  position: relative;
+  background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+  border: none;
+  border-radius: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  letter-spacing: 3px;
+  padding: 18px;
+  width: 100%;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.6),
+    0 0 40px rgba(168, 85, 247, 0.3),
+    inset 0 0 20px rgba(232, 121, 249, 0.2);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.btn-yellow-comic::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(232, 121, 249, 0.5), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn-yellow-comic:hover::before { transform: translateX(100%); }
+.btn-yellow-comic:hover {
+  box-shadow:
+    0 0 30px rgba(168, 85, 247, 0.9),
+    0 0 60px rgba(232, 121, 249, 0.6),
+    inset 0 0 30px rgba(232, 121, 249, 0.4);
+  transform: translateY(-1px);
+}
+.btn-yellow-comic:active { transform: translateY(2px); }
+
+/* === TECH INPUT === */
+.comic-input {
+  background: rgba(10, 1, 24, 0.7);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 4px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  width: 100%;
+  outline: none;
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.comic-input::placeholder {
+  color: rgba(192, 132, 252, 0.5);
+  letter-spacing: 1px;
+}
+.comic-input:focus {
+  border-color: var(--neon-strong);
+  box-shadow:
+    0 0 20px rgba(232, 121, 249, 0.5),
+    inset 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+/* === PAGES === */
+.page { display: none; padding: 20px 16px; }
+.page.active { display: block !important; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === BOTTOM NAV HUD === */
+.bottom-nav {
+  position: fixed; bottom: 16px; left: 16px; right: 16px;
+  background: linear-gradient(180deg, rgba(10, 1, 24, 0.95), rgba(5, 1, 15, 0.98));
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-around;
+  z-index: 9999;
+  box-shadow:
+    0 0 30px rgba(168, 85, 247, 0.4),
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(232, 121, 249, 0.2);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  backdrop-filter: blur(15px);
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: rgba(192, 132, 252, 0.5);
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(232, 121, 249, 0.2));
+  color: white;
+  border: 1px solid var(--neon);
+  box-shadow:
+    0 0 20px rgba(232, 121, 249, 0.8),
+    inset 0 0 15px rgba(232, 121, 249, 0.3);
+}
+.nav-item.active .nav-icon {
+  filter: drop-shadow(0 0 8px var(--neon-strong));
+}
+.nav-icon { font-size: 1.2rem; transition: all 0.3s; }
+.nav-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  }
+
+    /* === JAM HUD === */
+    .jam-besar {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: var(--neon-strong);
+      text-align: center;
+      letter-spacing: 6px;
+      line-height: 1.1;
+      text-shadow:
+        0 0 10px var(--neon-strong),
+        0 0 20px var(--neon),
+        0 0 40px var(--purple),
+        0 0 80px var(--purple);
+      animation: jamGlitch 3s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes jamGlitch {
+      0%, 92%, 100% { text-shadow: 0 0 10px var(--neon-strong), 0 0 20px var(--neon), 0 0 40px var(--purple); }
+      94% { text-shadow: -2px 0 var(--cyan), 2px 0 var(--pink), 0 0 40px var(--purple); }
+      96% { text-shadow: 2px 0 var(--cyan), -2px 0 var(--pink), 0 0 40px var(--purple); }
+    }
+
+    /* === WHATSAPP TECH === */
+    .wa-link { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+    .wa-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; color: white; flex-shrink: 0;
+      box-shadow:
+        0 0 25px rgba(37, 211, 102, 0.7),
+        0 0 50px rgba(37, 211, 102, 0.3),
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      transition: transform 0.3s;
+    }
+    .wa-link:hover .wa-icon { transform: scale(1.05) rotate(-5deg); }
+
+    /* === MSG === */
+    .msg-text {
+      text-align: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      margin-top: 10px;
+      min-height: 1.4rem;
+      font-size: 0.95rem;
+      color: var(--neon);
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+    }
+    .result-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(168, 85, 247, 0.15));
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      border-radius: 6px;
+      padding: 20px;
+      margin-top: 16px;
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    }
+
+    /* === WELCOME HUD === */
+    .home-welcome-pill {
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.2), rgba(59, 7, 100, 0.4));
+      border: 1px solid var(--neon);
+      border-radius: 4px;
+      padding: 14px 32px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-align: center;
+      margin: 8px auto 20px;
+      max-width: 320px;
+      color: white;
+      text-shadow:
+        0 0 10px var(--neon-strong),
+        0 0 20px var(--purple);
+      box-shadow:
+        0 0 25px rgba(168, 85, 247, 0.6),
+        inset 0 0 20px rgba(168, 85, 247, 0.2);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      position: relative;
+    }
+    .home-welcome-pill::before,
+    .home-welcome-pill::after {
+      content: '◢◤';
+      position: absolute;
+      font-size: 0.6rem;
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan);
+    }
+    .home-welcome-pill::before { top: 4px; left: 8px; }
+    .home-welcome-pill::after { bottom: 4px; right: 8px; }
+
+    /* === VIDEO FRAME TECH === */
+    .home-anime-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(232, 121, 249, 0.3));
+      border: 1px solid var(--neon);
+      border-radius: 6px;
+      padding: 4px;
+      box-shadow:
+        0 0 30px rgba(168, 85, 247, 0.6),
+        0 0 60px rgba(168, 85, 247, 0.3);
+      margin-bottom: 16px;
+      transition: transform 0.3s;
+      clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+      position: relative;
+    }
+    .home-anime-card:hover { transform: scale(1.01); }
+    .home-anime-video { width: 100%; display: block; border-radius: 2px; }
+
+    /* === FSS HUD === */
+    .fss-box { text-align: center; padding: 10px 0; }
+    .fss-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      border: 1px solid var(--neon);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 1.6rem;
+      color: white;
+      box-shadow:
+        0 0 25px rgba(168, 85, 247, 0.8),
+        0 0 50px rgba(232, 121, 249, 0.5),
+        inset 0 0 15px rgba(232, 121, 249, 0.3);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .fss-title {
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+      text-shadow:
+        0 0 10px var(--neon-strong),
+        0 0 20px var(--purple);
+    }
+
+    /* === MUSIC PANEL === */
+    .music-card {
+      background: linear-gradient(135deg, rgba(20, 8, 40, 0.9), rgba(10, 1, 24, 0.95));
+      border: 1px solid rgba(232, 121, 249, 0.5);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow:
+        0 0 30px rgba(232, 121, 249, 0.4),
+        inset 0 0 20px rgba(168, 85, 247, 0.15);
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+    }
+    .music-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(232, 121, 249, 0.15), transparent);
+      animation: scanMove 3s infinite;
+      pointer-events: none;
+    }
+    @keyframes scanMove { 100% { left: 100%; } }
+    .music-title {
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+      text-shadow:
+        0 0 10px var(--neon-strong),
+        0 0 20px var(--purple);
+      letter-spacing: 3px;
+      position: relative;
+    }
+    .music-icon {
+      font-size: 1.3rem;
+      animation: pulse 2s infinite;
+      color: var(--neon-strong);
+      filter: drop-shadow(0 0 10px var(--neon-strong));
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* === MUSIC CONTROLS === */
+    .music-controls {
+      display: flex; gap: 10px; margin-top: 12px;
+      align-items: center; position: relative;
+    }
+    .btn-music {
+      flex: 1;
+      background: rgba(10, 1, 24, 0.8);
+      border: 1px solid var(--neon);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      color: var(--neon);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+      transition: all 0.3s ease;
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+    }
+    .btn-music:active { transform: scale(0.97); }
+    .btn-music.playing {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.2));
+      border-color: #22c55e;
+      color: #4ade80;
+      box-shadow:
+        0 0 20px rgba(34, 197, 94, 0.7),
+        inset 0 0 15px rgba(34, 197, 94, 0.3);
+    }
+    .btn-music.paused {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.2));
+      border-color: #ef4444;
+      color: #f87171;
+      box-shadow:
+        0 0 20px rgba(239, 68, 68, 0.7),
+        inset 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+    .volume-wrap {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(10, 1, 24, 0.8);
+      border: 1px solid var(--neon);
+      border-radius: 4px;
+      padding: 10px 14px;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    }
+    .volume-wrap i {
+      font-size: 0.9rem;
+      color: var(--neon-strong);
+      filter: drop-shadow(0 0 5px var(--neon-strong));
+    }
+    #volumeSlider {
+      -webkit-appearance: none; appearance: none;
+      width: 80px; height: 4px;
+      background: linear-gradient(90deg, var(--purple), var(--neon-strong));
+      border-radius: 0; outline: none;
+      box-shadow: 0 0 10px rgba(232, 121, 249, 0.6);
+    }
+    #volumeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px;
+      background: var(--neon-strong);
+      border: 1px solid white;
+      border-radius: 0;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--neon-strong);
+    }
+    #volumeSlider::-moz-range-thumb {
+      width: 16px; height: 16px;
+      background: var(--neon-strong);
+      border: 1px solid white;
+      border-radius: 0;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--neon-strong);
+    }
+
+    /* === INFO GRID HUD === */
+    .info-feature-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0;
+    }
+    .info-mini-card {
+      background: linear-gradient(135deg, rgba(20, 8, 40, 0.9), rgba(10, 1, 24, 0.95));
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 4px;
+      padding: 16px 10px;
+      text-align: center;
+      box-shadow:
+        0 0 20px rgba(168, 85, 247, 0.2),
+        inset 0 0 15px rgba(168, 85, 247, 0.1);
+      transition: all 0.3s ease;
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      position: relative;
+    }
+    .info-mini-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 20px; height: 1px;
+      background: var(--neon-strong);
+      box-shadow: 0 0 8px var(--neon-strong);
+    }
+    .info-mini-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--neon-strong);
+      box-shadow:
+        0 0 30px rgba(232, 121, 249, 0.6),
+        inset 0 0 20px rgba(232, 121, 249, 0.2);
+    }
+    .info-mini-icon {
+      font-size: 1.5rem;
+      color: var(--neon-strong);
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 10px var(--neon-strong));
+    }
+    .info-mini-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: white;
+      text-shadow: 0 0 10px rgba(232, 121, 249, 0.8);
+    }
+    .info-mini-desc {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(192, 132, 252, 0.7);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* === BADGE HUD === */
+    .status-badge {
+      display: inline-block;
+      padding: 8px 18px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      margin-top: 12px;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(168, 85, 247, 0.15));
+      color: #22c55e;
+      border: 1px solid #22c55e;
+      box-shadow:
+        0 0 20px rgba(34, 197, 94, 0.6),
+        inset 0 0 15px rgba(34, 197, 94, 0.2);
+      text-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+      animation: badgePulse 2s infinite;
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+    }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), inset 0 0 15px rgba(34, 197, 94, 0.2); }
+      50% { box-shadow: 0 0 35px rgba(34, 197, 94, 1), inset 0 0 25px rgba(34, 197, 94, 0.4); }
+    }
+
+    /* === DIVIDER SCAN === */
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-strong), var(--cyan), var(--neon-strong), transparent);
+      margin: 20px 0;
+      box-shadow: 0 0 15px rgba(232, 121, 249, 0.8);
+      position: relative;
+    }
+    .divider-line::before,
+    .divider-line::after {
+      content: '◆';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--neon-strong);
+      font-size: 0.5rem;
+      text-shadow: 0 0 10px var(--neon-strong);
+    }
+    .divider-line::before { left: 0; }
+    .divider-line::after { right: 0; }
+
+    /* === TEXT OVERRIDES === */
+    .text-purple-500, .text-purple-600, .text-purple-700 { color: var(--neon-strong) !important; text-shadow: 0 0 10px rgba(232, 121, 249, 0.6); }
+    .text-gray-500 { color: rgba(192, 132, 252, 0.6) !important; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+    .text-green-600 { color: #22c55e !important; text-shadow: 0 0 15px rgba(34, 197, 94, 0.8); }
+  </style>
+</head>
+<body>
+
+  <div class="scanlines"></div>
+
+<script>
+  function switchPage(nama) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + nama);
+    if (target) target.classList.add('active');
+    ['home','activate','info'].forEach(tab => {
+      const el = document.getElementById('nav-' + tab);
+      if (el) el.classList.remove('active');
+    });
+    let aktif = 'nav-home';
+    if (nama === 'activate') aktif = 'nav-activate';
+    else if (nama === 'info') aktif = 'nav-info';
+    const el = document.getElementById(aktif);
+    if (el) el.classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function cobaMainkanAudio() {
+    const audio = document.getElementById('laguLatar');
+    if (!audio) return;
+    audio.play().then(() => {
+      updateMusicUI();
+    }).catch(() => {});
+  }
+  function mainkanLagu() {
+    const audio = document.getElementById('laguLatar');
+    if (audio) {
+      audio.play().then(() => {
+        updateMusicUI();
+      }).catch(() => {});
+    }
+  }
+  function toggleMusik(event) {
+    if (event) event.stopPropagation();
+    const audio = document.getElementById('laguLatar');
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play().then(() => {
+        updateMusicUI();
+      }).catch(() => {});
+    } else {
+      audio.pause();
+      updateMusicUI();
+    }
+  }
+  function updateMusicUI() {
+    const audio = document.getElementById('laguLatar');
+    const btn = document.getElementById('btnToggleMusik');
+    const icon = document.getElementById('iconToggleMusik');
+    const text = document.getElementById('textToggleMusik');
+    if (!audio || !btn || !icon || !text) return;
+    if (audio.paused) {
+      btn.classList.remove('playing');
+      btn.classList.add('paused');
+      icon.className = 'fas fa-play';
+      text.textContent = 'PUTAR LAGU';
+    } else {
+      btn.classList.remove('paused');
+      btn.classList.add('playing');
+      icon.className = 'fas fa-pause';
+      text.textContent = 'MATIIN LAGU';
+    }
+  }
+  function aturVolume(val) {
+    const audio = document.getElementById('laguLatar');
+    if (audio) audio.volume = parseFloat(val);
+    const iconVol = document.getElementById('iconVolume');
+    if (iconVol) {
+      if (val == 0) iconVol.className = 'fas fa-volume-mute';
+      else if (val < 0.5) iconVol.className = 'fas fa-volume-down';
+      else iconVol.className = 'fas fa-volume-up';
+    }
+  }
+</script>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="home-welcome-pill">WELCOME USER</div>
+
+  <div class="home-anime-card" onclick="mainkanLagu()">
+    <video src="vid.mp4" autoplay loop muted playsinline class="home-anime-video"></video>
+  </div>
+
+  <div class="music-card">
+    <div class="music-title" onclick="mainkanLagu()">
+      <i class="fas fa-music music-icon"></i> LAGU LATAR
+    </div>
+    <audio id="laguLatar" loop preload="auto">
+      <source src="https://files.catbox.moe/qje207.mp3" type="audio/mpeg">
+    </audio>
+    <div class="music-controls">
+      <button id="btnToggleMusik" class="btn-music playing" onclick="toggleMusik(event)">
+        <i id="iconToggleMusik" class="fas fa-pause"></i>
+        <span id="textToggleMusik">MATIIN LAGU</span>
+      </button>
+      <div class="volume-wrap">
+        <i id="iconVolume" class="fas fa-volume-up"></i>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1"
+               oninput="aturVolume(this.value)" />
+      </div>
+    </div>
+  </div>
+
+  <div class="comic-card-white">
+    <div class="fss-box">
+      <div class="fss-icon"><i class="fas fa-crown"></i></div>
+      <h3 class="fss-title">ALIGHT PREMIUM</h3>
+      <p class="text-sm text-gray-500">Satu-satunya fitur aktif</p>
+    </div>
+  </div>
+  <div class="comic-card-white">
+    <div class="text-center">
+      <i class="fas fa-wrench text-2xl text-purple-500 mb-2"></i>
+      <h3 class="font-anton text-purple-600 text-lg">FITUR LAINNYA</h3>
+      <p class="font-bold text-purple-700">Sedang diperbaiki...</p>
+      <p class="text-sm text-purple-500 mt-1">Mohon tunggu 🙏</p>
+    </div>
+  </div>
+  <button onclick="mainkanLagu(); switchPage('activate')" class="btn-yellow-comic mt-6">AKTIFKAN SEKARANG →</button>
+</div>
+
+<!-- AKTIVASI -->
+<div id="page-activate" class="page">
+  <div class="flex justify-center mb-4 pt-2">
+    <div class="title-pill"><h1>AKTIVASI</h1></div>
+  </div>
+  <div class="home-anime-card">
+    <video src="vid.mp4" autoplay loop muted playsinline class="home-anime-video"></video>
+  </div>
+  <div class="comic-card-purple">
+    <h2 class="font-anton text-center text-xl mb-6 text-white">
+      Verifikasi EMAIL<br>DAN MENIMATI PREMIUM 1 TAHUN
+    </h2>
+    <label class="font-anton text-white text-lg mb-2 block">Email</label>
+    <input type="email" id="amEmail" class="comic-input" placeholder="email@kamu.com" />
+    <button onclick="amKirim()" class="btn-yellow-comic">KIRIM LINK</button>
+    <p id="amMsg" class="msg-text"></p>
+    <div id="amStep2" style="display:none; margin-top:20px;">
+      <label class="font-anton text-white text-lg mb-2 block">Link Verifikasi</label>
+      <input type="text" id="amLink" class="comic-input" placeholder="Tempel link di sini..." />
+      <button onclick="amVerif()" class="btn-yellow-comic">VERIFIKASI</button>
+      <p id="amMsg2" class="msg-text"></p>
+    </div>
+    <div id="amHasil" class="result-box" style="display:none; margin-top:16px;">
+      <p class="font-anton text-green-600 text-xl text-center mb-3">✅ PREMIUM AKTIF!</p>
+      <p id="amResEmail" class="text-center font-bold">—</p>
+      <button onclick="ulangiVerifikasi()" class="btn-yellow-comic mt-4">ULANGI LANGSUNG</button>
+    </div>
+  </div>
+</div>
+
+<!-- INFO -->
+<div id="page-info" class="page">
+  <div class="flex justify-center mb-4 pt-2">
+    <div class="title-pill"><h1>INFORMASI</h1></div>
+  </div>
+  <div class="comic-card-purple mb-3">
+    <h2 class="font-anton text-center text-xl mb-4 text-white">CHANNEL ADMIN</h2>
+    <a href="https://whatsapp.com/channel/0029VbE0lagJENy1N8bBa31V" target="_blank" class="wa-link">
+      <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
+      <div>
+        <p class="font-anton text-white text-lg">Terima Kasih</p>
+        <p class="font-anton text-white text-lg">dan ikuti</p>
+      </div>
+    </a>
+  </div>
+  <div class="comic-card-purple text-center mb-3">
+    <h2 class="font-anton text-center text-xl mb-4 text-white">liat lah jam dan jangan liat masa lalu</h2>
+    <div class="jam-besar" id="jamSekarang">00.00.00</div>
+    <p class="font-anton text-white text-base mt-3">ingat masa lalu tidak akan merubah lu</p>
+    <span class="status-badge">● SISTEM ONLINE</span>
+  </div>
+  <div class="divider-line"></div>
+  <div class="info-feature-grid">
+    <div class="info-mini-card">
+      <i class="fas fa-bolt info-mini-icon"></i>
+      <h4 class="info-mini-title">CEPAT</h4>
+      <p class="info-mini-desc">antre admin jomblo</p>
+    </div>
+    <div class="info-mini-card">
+      <i class="fas fa-shield-alt info-mini-icon"></i>
+      <h4 class="info-mini-title">AMAN</h4>
+      <p class="info-mini-desc">hati-hati admin wibu</p>
+    </div>
+    <div class="info-mini-card">
+      <i class="fas fa-sync-alt info-mini-icon"></i>
+      <h4 class="info-mini-title">LANGSUNG</h4>
+      <p class="info-mini-desc">bisa premium akun sebanyak mungkin</p>
+    </div>
+    <div class="info-mini-card">
+      <i class="fas fa-headphones info-mini-icon"></i>
+      <h4 class="info-mini-title">MUSIK</h4>
+      <p class="info-mini-desc">MUSIK SAT ADMIN ITAYO-ITAYO</p>
+    </div>
+  </div>
+  <div class="comic-card-white text-center mt-2">
+    <p class="font-anton text-purple-600 text-lg">SELAMAT MENIKMATI 💜</p>
+    <p class="text-sm text-gray-500 mt-2">masih tahap beta maklum</p>
+  </div>
+</div>
+
+<!-- NAVIGASI BAWAH -->
+<nav class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="mainkanLagu(); switchPage('home')">
+    <i class="fas fa-home nav-icon"></i>
+    <span class="nav-label">HOME</span>
+  </div>
+  <div class="nav-item" id="nav-activate" onclick="mainkanLagu(); switchPage('activate')">
+    <i class="fas fa-crown nav-icon"></i>
+    <span class="nav-label">AKTIFASI</span>
+  </div>
+  <div class="nav-item" id="nav-info" onclick="mainkanLagu(); switchPage('info')">
+    <i class="fas fa-info nav-icon"></i>
+    <span class="nav-label">INFO</span>
+  </div>
+</nav> 
+
+  <script>
+    const API_URL = "https://api.qsr.web.id";
+    const API_KEY = "qsr";
+    let emailPengguna = "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(cobaMainkanAudio, 100);
+      aturVolume(1);
+      updateMusicUI();
+    });
+
+    function tampilkanJam() {
+      const el = document.getElementById('jamSekarang');
+      if (el) {
+        const d = new Date();
+        el.textContent =
+          String(d.getHours()).padStart(2,'0') + '.' +
+          String(d.getMinutes()).padStart(2,'0') + '.' +
+          String(d.getSeconds()).padStart(2,'0');
+      }
+    }
+    tampilkanJam();
+    setInterval(tampilkanJam, 1000);
+
+    function ulangiVerifikasi() {
+      emailPengguna = "";
+      document.getElementById('amEmail').value = "";
+      document.getElementById('amLink').value = "";
+      document.getElementById('amMsg').textContent = "";
+      document.getElementById('amMsg2').textContent = "";
+      document.getElementById('amStep2').style.display = 'none';
+      document.getElementById('amHasil').style.display = 'none';
+      setTimeout(() => document.getElementById('amEmail')?.focus(), 100);
+    }
+
+    async function amKirim() {
+      const email = document.getElementById('amEmail').value.trim();
+      const msg = document.getElementById('amMsg');
+      if (!email || !email.includes('@')) {
+        msg.textContent = '⚠️ Email tidak valid — ketik ulang langsung!';
+        return;
+      }
+      emailPengguna = email;
+      msg.textContent = '⏳ Mengirim...';
+      try {
+        const res = await fetch(`${API_URL}/alight/send?apikey=${API_KEY}&email=${encodeURIComponent(email)}`);
+        const d = await res.json();
+        if (d.status) {
+          msg.textContent = '✅ Link dikirim! Cek email';
+          document.getElementById('amStep2').style.display = 'block';
+        } else {
+          msg.textContent = '❌ ' + (d.message || d.error || 'Gagal — tekan lagi sekarang!');
+        }
+      } catch {
+        msg.textContent = '❌ Koneksi gagal — tekan lagi sekarang!';
+      }
+    }
+
+    async function amVerif() {
+      const link = document.getElementById('amLink').value.trim();
+      const msg = document.getElementById('amMsg2');
+      if (!link) { msg.textContent = '⚠️ Masukkan link — tempel langsung!'; return; }
+      msg.textContent = '⏳ Memverifikasi...';
+      try {
+        const res = await fetch(`${API_URL}/alight/verify?apikey=${API_KEY}&email=${encodeURIComponent(emailPengguna)}&link=${encodeURIComponent(link)}`);
+        const d = await res.json();
+        if (d.status) {
+          msg.textContent = '✅ Berhasil!';
+          document.getElementById('amResEmail').textContent = emailPengguna;
+          document.getElementById('amHasil').style.display = 'block';
+        } else {
+          msg.textContent = '❌ ' + (d.message || d.error || 'Gagal — coba lagi sekarang!');
+        }
+      } catch {
+        msg.textContent = '❌ Koneksi gagal — coba lagi sekarang!';
+      }
+    }
+  </script>
+</body>
+</html>
