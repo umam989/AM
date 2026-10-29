@@ -1,0 +1,10 @@
+{
+    "admin": {
+        "username": "admin",
+        "password": "admin123",
+        "role": "admin",
+        "expiredAt": null,
+        "quota": null,
+        "createdAt": 1710000000000
+    }
+}
