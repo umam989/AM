@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AM Premium — MAMZz // NEON</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-cyan: #00f0ff;
+      --neon-blue: #0080ff;
+      --neon-magenta: #ff00e5;
+      --bg-deep: #04060f;
+      --bg-card: #0a0f24;
+      --bg-card-2: #0f1830;
+      --border-glow: #00f0ff;
+      --text-dim: #7d97c0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--bg-deep);
+      color: #e6f7ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 20% 10%, rgba(0,240,255,0.12), transparent 40%),
+        radial-gradient(circle at 80% 90%, rgba(255,0,229,0.10), transparent 45%),
+        linear-gradient(rgba(0,240,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.06) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      background-attachment: fixed;
+      padding-bottom: 110px;
+      position: relative;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.18) 0px,
+        rgba(0,0,0,0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+    .page { display: none; padding: 20px 16px; position: relative; z-index: 2; }
+    .page.active { display: block !important; }
+
+    /* ================== TYPOGRAPHY ================== */
+    .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; }
+    .font-mono { font-family: 'Share Tech Mono', monospace; }
+
+    .neon-text {
+      color: var(--neon-cyan);
+      text-shadow:
+        0 0 4px rgba(0,240,255,0.9),
+        0 0 12px rgba(0,240,255,0.6),
+        0 0 24px rgba(0,240,255,0.35);
+    }
+    .neon-text-magenta {
+      color: var(--neon-magenta);
+      text-shadow:
+        0 0 4px rgba(255,0,229,0.9),
+        0 0 12px rgba(255,0,229,0.5);
+    }
+
+    /* ================== TITLE PILL ================== */
+    .title-pill {
+      background: rgba(0,20,40,0.75);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 10px 32px;
+      text-align: center;
+      box-shadow:
+        0 0 12px rgba(0,240,255,0.55),
+        inset 0 0 12px rgba(0,240,255,0.15);
+      position: relative;
+      backdrop-filter: blur(4px);
+    }
+    .title-pill::before,
+    .title-pill::after {
+      content: "";
+      position: absolute;
+      width: 8px; height: 8px;
+      border: 2px solid var(--neon-cyan);
+      top: -2px;
+    }
+    .title-pill::before { left: -2px; border-right: none; border-bottom: none; }
+    .title-pill::after { right: -2px; border-left: none; border-bottom: none; }
+    .title-pill h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-cyan);
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-shadow:
+        0 0 6px rgba(0,240,255,0.9),
+        0 0 18px rgba(0,240,255,0.5);
+      margin: 0;
+    }
+
+    /* ================== CARDS ================== */
+    .cyber-card {
+      background: linear-gradient(160deg, rgba(10,15,36,0.92), rgba(6,10,25,0.92));
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 14px;
+      box-shadow:
+        0 0 18px rgba(0,240,255,0.25),
+        inset 0 0 22px rgba(0,240,255,0.06);
+      padding: 22px;
+      margin-bottom: 16px;
+      position: relative;
+      backdrop-filter: blur(6px);
+    }
+    .cyber-card::before {
+      content: "";
+      position: absolute;
+      top: -1px; left: 16px; right: 16px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      filter: blur(0.5px);
+    }
+    .cyber-card.magenta {
+      border-color: rgba(255,0,229,0.55);
+      box-shadow:
+        0 0 18px rgba(255,0,229,0.22),
+        inset 0 0 22px rgba(255,0,229,0.06);
+    }
+    .cyber-card.magenta::before {
+      background: linear-gradient(90deg, transparent, var(--neon-magenta), transparent);
+    }
+
+    /* ================== BUTTONS ================== */
+    .btn-neon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(180deg, rgba(0,240,255,0.15), rgba(0,120,255,0.15));
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 10px;
+      width: 100%;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow:
+        0 0 12px rgba(0,240,255,0.35),
+        inset 0 0 12px rgba(0,240,255,0.12);
+      transition: all 0.15s ease;
+      text-shadow: 0 0 6px rgba(0,240,255,0.9);
+    }
+    .btn-neon:hover {
+      background: linear-gradient(180deg, rgba(0,240,255,0.28), rgba(0,120,255,0.28));
+      box-shadow:
+        0 0 22px rgba(0,240,255,0.65),
+        inset 0 0 16px rgba(0,240,255,0.25);
+    }
+    .btn-neon:active {
+      transform: scale(0.98);
+    }
+    .btn-neon.danger {
+      border-color: #ff2a6d;
+      color: #ff5b8a;
+      background: linear-gradient(180deg, rgba(255,42,109,0.15), rgba(255,42,109,0.05));
+      box-shadow: 0 0 12px rgba(255,42,109,0.35);
+      text-shadow: 0 0 6px rgba(255,42,109,0.9);
+    }
+    .btn-neon.magenta {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+      background: linear-gradient(180deg, rgba(255,0,229,0.15), rgba(255,0,229,0.05));
+      box-shadow: 0 0 12px rgba(255,0,229,0.35);
+      text-shadow: 0 0 6px rgba(255,0,229,0.9);
+    }
+
+    .btn-mini {
+      border: 1.5px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      background: rgba(0,240,255,0.08);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 0 8px rgba(0,240,255,0.25);
+      transition: all 0.15s;
+    }
+    .btn-mini:hover { background: rgba(0,240,255,0.2); }
+    .btn-mini.ok {
+      border-color: #00ff9c;
+      color: #00ff9c;
+      background: rgba(0,255,156,0.08);
+      box-shadow: 0 0 8px rgba(0,255,156,0.25);
+    }
+    .btn-mini.danger {
+      border-color: #ff2a6d;
+      color: #ff2a6d;
+      background: rgba(255,42,109,0.08);
+      box-shadow: 0 0 8px rgba(255,42,109,0.25);
+    }
+    .btn-mini.info {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+      background: rgba(255,0,229,0.08);
+      box-shadow: 0 0 8px rgba(255,0,229,0.25);
+    }
+
+    /* ================== INPUTS ================== */
+    .cyber-input {
+      width: 100%;
+      background: rgba(0,10,25,0.85);
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #e6f7ff;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 12px;
+      box-shadow: inset 0 0 10px rgba(0,240,255,0.15);
+      transition: all 0.15s;
+    }
+    .cyber-input::placeholder { color: #4c6a8a; font-weight: 400; }
+    .cyber-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow:
+        inset 0 0 12px rgba(0,240,255,0.3),
+        0 0 14px rgba(0,240,255,0.4);
+    }
+    input[type="date"].cyber-input::-webkit-calendar-picker-indicator {
+      filter: invert(1) hue-rotate(180deg);
+      cursor: pointer;
+    }
+
+    /* ================== BOTTOM NAV ================== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 16px; left: 16px; right: 16px;
+      background: rgba(4, 8, 22, 0.95);
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 14px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-around;
+      z-index: 9999;
+      box-shadow:
+        0 0 22px rgba(0,240,255,0.35),
+        inset 0 0 16px rgba(0,240,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: #4c6a8a;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-item.active {
+      color: var(--neon-cyan);
+      background: rgba(0,240,255,0.1);
+      box-shadow:
+        0 0 12px rgba(0,240,255,0.5),
+        inset 0 0 10px rgba(0,240,255,0.15);
+      text-shadow: 0 0 6px rgba(0,240,255,0.9);
+    }
+    .nav-icon { font-size: 1.1rem; }
+    .nav-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    /* ================== JAM BESAR ================== */
+    .jam-besar {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 2.6rem;
+      text-align: center;
+      letter-spacing: 4px;
+      line-height: 1;
+      color: var(--neon-cyan);
+      text-shadow:
+        0 0 6px rgba(0,240,255,0.9),
+        0 0 16px rgba(0,240,255,0.7),
+        0 0 32px rgba(0,240,255,0.4);
+    }
+
+    /* ================== MISC ================== */
+    .home-welcome-pill {
+      background: rgba(0,20,40,0.8);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 8px 28px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.15rem;
+      letter-spacing: 4px;
+      text-align: center;
+      margin: 8px auto 16px;
+      max-width: 320px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px rgba(0,240,255,0.8);
+      box-shadow: 0 0 16px rgba(0,240,255,0.35);
+    }
+
+    .home-anime-card {
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 18px rgba(0,240,255,0.28);
+      overflow: hidden;
+      background: #000;
+    }
+    .home-anime-video {
+      width: 100%; display: block; border-radius: 10px;
+      filter: saturate(1.15) contrast(1.05);
+    }
+
+    .wa-link { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+    .wa-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(180deg, #25d366, #128c7e);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: white;
+      flex-shrink: 0;
+      box-shadow:
+        0 0 14px rgba(37,211,102,0.55),
+        inset 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    .msg-text {
+      text-align: center;
+      font-weight: 600;
+      margin-top: 10px;
+      min-height: 1.3rem;
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .result-box {
+      background: rgba(0,20,10,0.85);
+      border: 2px solid #00ff9c;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 16px;
+      box-shadow: 0 0 18px rgba(0,255,156,0.35);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      background: rgba(0,255,156,0.1);
+      color: #00ff9c;
+      border: 1.5px solid #00ff9c;
+      box-shadow: 0 0 12px rgba(0,255,156,0.4);
+      text-shadow: 0 0 6px rgba(0,255,156,0.9);
+    }
+
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      margin: 18px 0;
+      opacity: 0.5;
+      box-shadow: 0 0 6px var(--neon-cyan);
+    }
+
+    .info-feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .info-mini-card {
+      background: rgba(10,15,36,0.85);
+      border: 1.5px solid rgba(0,240,255,0.45);
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow:
+        0 0 12px rgba(0,240,255,0.2),
+        inset 0 0 10px rgba(0,240,255,0.05);
+    }
+    .info-mini-icon {
+      font-size: 1.4rem;
+      color: var(--neon-cyan);
+      margin-bottom: 8px;
+      text-shadow: 0 0 8px rgba(0,240,255,0.8);
+    }
+    .info-mini-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+    }
+    .info-mini-desc {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      line-height: 1.2;
+    }
+
+    /* ================== MUSIC CARD ================== */
+    .music-card {
+      background: linear-gradient(135deg, rgba(0,120,255,0.18), rgba(255,0,229,0.12));
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow:
+        0 0 20px rgba(0,240,255,0.28),
+        inset 0 0 16px rgba(0,240,255,0.06);
+    }
+    .music-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 8px rgba(0,240,255,0.9);
+      cursor: pointer;
+    }
+    .music-icon {
+      font-size: 1.2rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.85; }
+    }
+    .music-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-music {
+      flex: 1;
+      background: rgba(0,10,25,0.9);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.9);
+      box-shadow: 0 0 10px rgba(0,240,255,0.3);
+      transition: all 0.15s;
+    }
+    .btn-music.playing {
+      border-color: #00ff9c;
+      color: #00ff9c;
+      box-shadow: 0 0 12px rgba(0,255,156,0.5);
+      text-shadow: 0 0 6px rgba(0,255,156,0.9);
+    }
+    .btn-music.paused {
+      border-color: #ff2a6d;
+      color: #ff2a6d;
+      box-shadow: 0 0 12px rgba(255,42,109,0.5);
+      text-shadow: 0 0 6px rgba(255,42,109,0.9);
+    }
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,10,25,0.9);
+      border: 2px solid rgba(0,240,255,0.55);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: inset 0 0 8px rgba(0,240,255,0.15);
+    }
+    .volume-wrap i {
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.8);
+    }
+    #volumeSlider {
+      -webkit-appearance: none; appearance: none;
+      width: 76px; height: 4px;
+      background: rgba(0,240,255,0.35);
+      border-radius: 2px;
+      outline: none;
+    }
+    #volumeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,240,255,1);
+    }
+    #volumeSlider::-moz-range-thumb {
+      width: 16px; height: 16px;
+      background: var(--neon-cyan);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,240,255,1);
+    }
+
+    .play-hint {
+      background: rgba(0,240,255,0.12);
+      border: 1.5px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 0 14px rgba(0,240,255,0.35);
+      text-shadow: 0 0 6px rgba(0,240,255,0.9);
+    }
+    .play-hint.visible { display: block; }
+
+    /* ================== LABEL ================== */
+    .cyber-label {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.7);
+      display: block;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    /* Badge user chip */
+    .user-chip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(0,10,25,0.85);
+      border: 1.5px solid rgba(0,240,255,0.5);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      box-shadow: 0 0 12px rgba(0,240,255,0.2);
+    }
+    .user-chip .name {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.8);
+    }
+    .user-chip .meta {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Member list item */
+    .member-card {
+      border: 1.5px solid rgba(0,240,255,0.5);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: rgba(0,10,25,0.85);
+      box-shadow: 0 0 12px rgba(0,240,255,0.18);
+    }
+    .member-card .uname {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px rgba(0,240,255,0.6);
+    }
+    .badge-status {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid;
+    }
+    .badge-status.active {
+      color: #00ff9c;
+      border-color: #00ff9c;
+      background: rgba(0,255,156,0.1);
+      text-shadow: 0 0 5px rgba(0,255,156,0.9);
+    }
+    .badge-status.expired {
+      color: #ff2a6d;
+      border-color: #ff2a6d;
+      background: rgba(255,42,109,0.1);
+      text-shadow: 0 0 5px rgba(255,42,109,0.9);
+    }
+
+    /* Utility text colors */
+    .text-cyan { color: var(--neon-cyan); }
+    .text-magenta { color: var(--neon-magenta); }
+    .text-dim { color: var(--text-dim); }
+
+    /* === TOMBOL WA DI HALAMAN LOGIN === */
+.wa-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0, 15, 30, 0.85);
+  border: 2px solid var(--neon-cyan); /* Border cyan neon */
+  border-radius: 10px;
+  padding: 14px;
+  text-decoration: none;
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25), inset 0 0 10px rgba(0, 240, 255, 0.1);
+  transition: all 0.2s;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.8);
+}
+.wa-login-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.6), inset 0 0 15px rgba(0, 240, 255, 0.2);
+  transform: translateY(-2px);
+}
+.wa-login-icon {
+  font-size: 1.6rem;
+  color: #25d366; /* Warna khas WhatsApp */
+  text-shadow: 0 0 10px rgba(37, 211, 102, 0.8); /* Efek glow hijau */
+}
+    
+  </style>
+</head>
+<body>
+
+  <script>
+    /* ============================================================
+       ==============  SISTEM AUTH (localStorage)  ================
+       ============================================================ */
+    const LS_USERS   = 'amz_users_v1';
+    const LS_SESSION = 'amz_session_v1';
+
+    function getUsers() {
+      try { return JSON.parse(localStorage.getItem(LS_USERS)) || []; }
+      catch { return []; }
+    }
+    function saveUsers(list) { localStorage.setItem(LS_USERS, JSON.stringify(list)); }
+    function getSession() {
+      try { return JSON.parse(localStorage.getItem(LS_SESSION)); }
+      catch { return null; }
+    }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+// Hitung tanggal expired dari jumlah hari
+function hitungExpired(days) {
+  const n = parseInt(days, 10);
+  if (!n || n <= 0) return null; // 0 / kosong = tanpa expired
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+// Sisa hari dari tanggal expired
+function sisaHari(expiredAt) {
+  if (!expiredAt) return null;
+  const exp = new Date(expiredAt + 'T23:59:59');
+  return Math.ceil((exp - new Date()) / (1000 * 60 * 60 * 24));
+}
+
+    // Akun admin default (GANTI SEBELUM DIPAKAI!)
+    function initAdmin() {
+      const users = getUsers();
+      if (!users.find(u => u.username.toLowerCase() === 'admin')) {
+        users.push({
+          username: 'admin',
+          password: 'admin123',       // <-- GANTI!
+          role: 'admin',
+          expiredAt: null,
+          quota: null,
+          createdAt: Date.now()
+        });
+        saveUsers(users);
+      }
+    }
+
+    /* ================ LOGIN ================ */
+    function prosesLogin() {
+      const uInput = document.getElementById('loginUser').value.trim();
+      const pInput = document.getElementById('loginPass').value;
+      const msg = document.getElementById('loginMsg');
+
+      if (!uInput || !pInput) { msg.textContent = '⚠️ ISI USERNAME & PASSWORD!'; return; }
+
+      const users = getUsers();
+      const user = users.find(x => x.username.toLowerCase() === uInput.toLowerCase());
+
+      if (!user || user.password !== pInput) {
+        msg.textContent = '❌ USERNAME ATAU PASSWORD SALAH!';
+        return;
+      }
+
+      if (user.role === 'member' && user.expiredAt) {
+        if (new Date(user.expiredAt + 'T23:59:59') < new Date()) {
+          msg.textContent = '❌ AKUN EXPIRED! HUBUNGI ADMIN.';
+          return;
+        }
+      }
+
+      localStorage.setItem(LS_SESSION, JSON.stringify({
+        username: user.username, role: user.role, loginAt: Date.now()
+      }));
+
+      msg.textContent = '✅ ACCESS GRANTED';
+      setTimeout(() => masukAplikasi(user), 250);
+    }
+
+    function masukAplikasi(user) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelector('.bottom-nav').style.display = 'flex';
+      document.getElementById('nav-admin').style.display = (user.role === 'admin') ? 'flex' : 'none';
+
+      updateUserBadge();
+
+      if (user.role === 'admin') switchPage('admin');
+      else switchPage('home');
+
+      mainkanLagu();
+    }
+
+    function logout() {
+      if (!confirm('Yakin mau logout?')) return;
+      localStorage.removeItem(LS_SESSION);
+      document.querySelector('.bottom-nav').style.display = 'none';
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-login').classList.add('active');
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginMsg').textContent = '';
+      const audio = document.getElementById('laguLatar');
+      if (audio) audio.pause();
+      updateMusicUI();
+      window.scrollTo(0,0);
+    }
+
+    function cekAkses() {
+      const s = getSession();
+      if (!s) return { ok:false, msg:'⚠️ SESI HABIS, LOGIN ULANG.' };
+      if (s.role === 'admin') return { ok:true };
+
+      const u = getUsers().find(x => x.username === s.username);
+      if (!u) return { ok:false, msg:'⚠️ AKUN TIDAK DITEMUKAN.' };
+      if (u.expiredAt && new Date(u.expiredAt + 'T23:59:59') < new Date()) {
+        return { ok:false, msg:'❌ AKUN EXPIRED! HUBUNGI ADMIN.' };
+      }
+      if (u.quota <= 0) return { ok:false, msg:'❌ KUOTA HABIS! HUBUNGI ADMIN.' };
+      return { ok:true };
+    }
+
+    function kurangiKuota() {
+      const s = getSession();
+      if (!s || s.role === 'admin') return true;
+      const users = getUsers();
+      const u = users.find(x => x.username === s.username);
+      if (!u || u.quota <= 0) return false;
+      u.quota -= 1;
+      saveUsers(users);
+      updateUserBadge();
+      return true;
+    }
+
+    function updateUserBadge() {
+      const s = getSession();
+      if (!s) return;
+      const elUser  = document.getElementById('badgeUser');
+      const elInfo  = document.getElementById('badgeInfo');
+      const elUser2 = document.getElementById('badgeUser2');
+      const elInfo2 = document.getElementById('badgeInfo2');
+
+      if (s.role === 'admin') {
+        if (elUser)  elUser.textContent  = '👑 ADMIN';
+        if (elInfo)  elInfo.textContent  = 'AKSES PENUH • UNLIMITED';
+        if (elUser2) elUser2.textContent = '👑 ADMIN';
+        if (elInfo2) elInfo2.textContent = 'AKSES PENUH • UNLIMITED';
+      } else {
+        const u = getUsers().find(x => x.username === s.username);
+        if (!u) return;
+        const text1 = '👤 ' + u.username;
+        const text2 = `KUOTA: ${u.quota} • EXP: ${u.expiredAt || '∞'}`;
+        if (elUser)  elUser.textContent  = text1;
+        if (elInfo)  elInfo.textContent  = text2;
+        if (elUser2) elUser2.textContent = text1;
+        if (elInfo2) elInfo2.textContent = text2;
+      }
+    }
+
+    /* ================ PANEL ADMIN ================ */
+    function buatMember() {
+      const uname = document.getElementById('newUser').value.trim();
+      const pass  = document.getElementById('newPass').value;
+      const exp   = document.getElementById('newExp').value;
+      const q     = parseInt(document.getElementById('newQuota').value, 10) || 0;
+      const msg   = document.getElementById('adminMsg');
+
+      if (!uname || !pass) { msg.textContent = '⚠️ USERNAME & PASSWORD WAJIB!'; return; }
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(uname)) {
+        msg.textContent = '⚠️ USERNAME 3-20 KARAKTER (HURUF/ANGKA/_)'; return;
+      }
+
+      const users = getUsers();
+      if (users.find(x => x.username.toLowerCase() === uname.toLowerCase())) {
+        msg.textContent = '❌ USERNAME SUDAH DIPAKAI!'; return;
+      }
+
+      users.push({
+        username: uname, password: pass, role: 'member',
+        expiredAt: exp || null, quota: Math.max(0, q), createdAt: Date.now()
+      });
+      saveUsers(users);
+
+      msg.textContent = '✅ MEMBER BERHASIL DIBUAT!';
+      document.getElementById('newUser').value = '';
+      document.getElementById('newPass').value = '';
+      document.getElementById('newQuota').value = '1';
+      renderAdminPanel();
+    }
+
+    function renderAdminPanel() {
+      const users = getUsers().filter(u => u.role === 'member');
+      const box = document.getElementById('memberList');
+      if (!box) return;
+
+      if (!users.length) {
+        box.innerHTML = '<p class="text-center text-dim text-sm py-4">Belum ada member.</p>';
+        return;
+      }
+
+      box.innerHTML = users.map(u => {
+        const exp = u.expiredAt || '';
+        const expired = u.expiredAt && new Date(u.expiredAt + 'T23:59:59') < new Date();
+        const safeU = esc(u.username);
+        return `
+          <div class="member-card" data-uname="${safeU}">
+            <div class="flex justify-between items-center mb-3">
+              <p class="uname">${safeU}</p>
+              <span class="badge-status ${expired ? 'expired' : 'active'}">
+                ${expired ? 'EXPIRED' : 'AKTIF'}
+              </span>
+            </div>
+             style="font-size:0.65rem;">EXPIRED</label>
+            <input type="date" value="${exp}" data-field="exp" class="cyber-input"
+                   style="padding:8px 10px; font-size:0.85rem; margin-bottom:8px;" />
+            <label class="cyber-label" style="font-size:0.65rem;">KUOTA PREMIUM</label>
+            <input type="number" min="0" value="${u.quota}" data-field="quota" class="cyber-input"
+                   style="padding:8px 10px; font-size:0.85rem; margin-bottom:10px;" />
+            <div class="flex gap-2 flex-wrap">
+              <button class="btn-mini ok" onclick="simpanMember(this,'${safeU}')">SIMPAN</button>
+              <button class="btn-mini info" onclick="resetPass('${safeU}')">RESET PASS</button>
+              <button class="btn-mini danger" onclick="hapusMember('${safeU}')">HAPUS</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function simpanMember(btn, uname) {
+      const card = btn.closest('.member-card');
+      const exp = card.querySelector('[data-field="exp"]').value;
+      const q = parseInt(card.querySelector('[data-field="quota"]').value, 10) || 0;
+      const users = getUsers();
+      const u = users.find(x => x.username === uname);
+      if (!u) return;
+      u.expiredAt = exp || null;
+      u.quota = Math.max(0, q);
+      saveUsers(users);
+      renderAdminPanel();
+      alert('✅ Data member disimpan.');
+    }
+
+    function resetPass(uname) {
+      const baru = prompt(`Password baru untuk "${uname}":`);
+      if (!baru) return;
+      const users = getUsers();
+      const u = users.find(x => x.username === uname);
+      if (!u) return;
+      u.password = baru;
+      saveUsers(users);
+      alert('✅ Password direset.');
+    }
+
+    function hapusMember(uname) {
+      if (!confirm(`Hapus member "${uname}"?`)) return;
+      const users = getUsers().filter(x => x.username !== uname);
+      saveUsers(users);
+      renderAdminPanel();
+    }
+
+    /* ================ NAVIGASI ================ */
+    function switchPage(nama) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('page-' + nama);
+      if (target) target.classList.add('active');
+
+      ['home','activate','info','admin'].forEach(tab => {
+        const el = document.getElementById('nav-' + tab);
+        if (el) el.classList.remove('active');
+      });
+      const el = document.getElementById('nav-' + nama);
+      if (el) el.classList.add('active');
+
+      if (nama === 'admin') renderAdminPanel();
+      if (nama === 'home' || nama === 'activate') updateUserBadge();
+      window.scrollTo(0,0);
+    }
+
+    /* ================ MUSIK ================ */
+    function cobaMainkanAudio() {
+      const audio = document.getElementById('laguLatar');
+      const petunjuk = document.getElementById('petunjukMain');
+      if (!audio) return;
+      audio.play().then(() => {
+        if (petunjuk) petunjuk.classList.remove('visible');
+        updateMusicUI();
+      }).catch(() => {
+        if (petunjuk) petunjuk.classList.add('visible');
+      });
+    }
+    function mainkanLagu() {
+      const audio = document.getElementById('laguLatar');
+      const petunjuk = document.getElementById('petunjukMain');
+      if (audio) {
+        audio.play().then(() => {
+          if (petunjuk) petunjuk.classList.remove('visible');
+          updateMusicUI();
+        }).catch(() => {});
+      }
+    }
+    function toggleMusik(event) {
+      if (event) event.stopPropagation();
+      const audio = document.getElementById('laguLatar');
+      const petunjuk = document.getElementById('petunjukMain');
+      if (!audio) return;
+      if (audio.paused) {
+        audio.play().then(() => {
+          if (petunjuk) petunjuk.classList.remove('visible');
+          updateMusicUI();
+        }).catch(() => {});
+      } else {
+        audio.pause();
+        updateMusicUI();
+      }
+    }
+    function updateMusicUI() {
+      const audio = document.getElementById('laguLatar');
+      const btn = document.getElementById('btnToggleMusik');
+      const icon = document.getElementById('iconToggleMusik');
+      const text = document.getElementById('textToggleMusik');
+      if (!audio || !btn || !icon || !text) return;
+      if (audio.paused) {
+        btn.classList.remove('playing');
+        btn.classList.add('paused');
+        icon.className = 'fas fa-play';
+        text.textContent = 'PUTAR LAGU';
+      } else {
+        btn.classList.remove('paused');
+        btn.classList.add('playing');
+        icon.className = 'fas fa-pause';
+        text.textContent = 'MATIIN LAGU';
+      }
+    }
+    function aturVolume(val) {
+      const audio = document.getElementById('laguLatar');
+      if (audio) audio.volume = parseFloat(val);
+      const iconVol = document.getElementById('iconVolume');
+      if (iconVol) {
+        if (val == 0) iconVol.className = 'fas fa-volume-mute';
+        else if (val < 0.5) iconVol.className = 'fas fa-volume-down';
+        else iconVol.className = 'fas fa-volume-up';
+      }
+    }
+  </script>
+
+    <!-- ================= HALAMAN LOGIN ================= -->
+  <div id="page-login" class="page active">
+    <div class="flex justify-center mb-4 pt-6">
+      <div class="title-pill"><h1>ACCESS</h1></div>
+    </div>
+    <div class="cyber-card" style="max-width:420px; margin:0 auto;">
+      <div class="text-center mb-5">
+        <div style="width:64px; height:64px; margin:0 auto 14px; border:2px solid var(--neon-cyan); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.7rem; color:var(--neon-cyan); box-shadow:0 0 18px rgba(0,240,255,0.5), inset 0 0 12px rgba(0,240,255,0.2); text-shadow:0 0 10px rgba(0,240,255,0.9);">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <h3 class="font-orbitron neon-text" style="font-size:1.2rem; font-weight:900; letter-spacing:3px;">AM PREMIUM</h3>
+        <p class="text-dim text-xs mt-1" style="letter-spacing:2px;">// SECURE ACCESS PORTAL //</p>
+      </div>
+
+      <label class="cyber-label">USERNAME</label>
+      <input type="text" id="loginUser" class="cyber-input" placeholder="> username" autocomplete="username" />
+
+      <label class="cyber-label">PASSWORD</label>
+      <input type="password" id="loginPass" class="cyber-input" placeholder="> ••••••" autocomplete="current-password" />
+
+      <button onclick="prosesLogin()" class="btn-neon">
+        <i class="fas fa-right-to-bracket"></i> MASUK
+      </button>
+      <p id="loginMsg" class="msg-text"></p>
+
+      <div class="divider-line"></div>
+      <p class="text-center text-dim text-xs" style="letter-spacing:1px;">// BELUM PUNYA AKUN? MINTA KE ADMIN //</p>
+
+      <!-- KOTAK 1 & 2: LINK GRUP & SALURAN WA -->
+<div style="max-width: 420px; margin: 16px auto 0 auto; display: flex; flex-direction: column; gap: 12px;">
+  
+  <!-- Kotak 1: Grup WA -->
+  <a href="https://chat.whatsapp.com/EjfEUvmCtB607CKVUEetos?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank" class="wa-login-btn">
+    <i class="fab fa-whatsapp wa-login-icon"></i>
+    <span>GABUNG GRUP WA</span>
+  </a>
+
+  <!-- Kotak 2: Saluran WA -->
+  <a href="https://whatsapp.com/channel/0029Vb7vS8qBPzjUVI4mMA3Y" target="_blank" class="wa-login-btn">
+    <i class="fab fa-whatsapp wa-login-icon"></i>
+    <span>IKUTI SALURAN WA</span>
+  </a>
+
+</div>
+      
+    </div>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <div id="page-home" class="page">
+    <div class="home-welcome-pill">SYSTEM READY</div>
+
+    <div class="user-chip">
+      <div class="min-w-0">
+        <p class="name truncate" id="badgeUser">—</p>
+        <p class="meta truncate" id="badgeInfo">—</p>
+      </div>
+      <button onclick="logout()" class="btn-mini danger" style="flex-shrink:0;">LOGOUT</button>
+    </div>
+
+    <div id="petunjukMain" class="play-hint visible" onclick="mainkanLagu()">
+      <i class="fas fa-play"></i> KETUK UNTUK NYALAKAN AUDIO
+    </div>
+
+    <div class="home-anime-card" onclick="mainkanLagu()">
+      <video src="vid.mp4" autoplay loop muted playsinline class="home-anime-video"></video>
+    </div>
+
+    <div class="music-card">
+      <div class="music-title" onclick="mainkanLagu()">
+        <i class="fas fa-music music-icon"></i> AUDIO STREAM
+      </div>
+      <audio id="laguLatar" loop preload="auto">
+        <source src="https://files.catbox.moe/qje207.mp3" type="audio/mpeg">
+      </audio>
+      <div class="music-controls">
+        <button id="btnToggleMusik" class="btn-music playing" onclick="toggleMusik(event)">
+          <i id="iconToggleMusik" class="fas fa-pause"></i>
+          <span id="textToggleMusik">MATIIN LAGU</span>
+        </button>
+        <div class="volume-wrap">
+          <i id="iconVolume" class="fas fa-volume-up"></i>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1"
+                 oninput="aturVolume(this.value)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="cyber-card">
+      <div class="text-center">
+        <div style="width:56px; height:56px; margin:0 auto 12px; border:2px solid var(--neon-cyan); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; color:var(--neon-cyan); box-shadow:0 0 14px rgba(0,240,255,0.45);">
+          <i class="fas fa-crown"></i>
+        </div>
+        <h3 class="font-orbitron neon-text" style="font-size:1.05rem; font-weight:900; letter-spacing:2px;">ALIGHT PREMIUM</h3>
+        <p class="text-dim text-xs mt-1" style="letter-spacing:1px;">// SATU-SATUNYA MODUL AKTIF //</p>
+      </div>
+    </div>
+
+    <div class="cyber-card magenta">
+      <div class="text-center">
+        <i class="fas fa-wrench text-2xl text-magenta mb-2" style="text-shadow:0 0 10px rgba(255,0,229,0.8);"></i>
+        <h3 class="font-orbitron text-magenta" style="font-size:1rem; font-weight:900; letter-spacing:2px;">MODULE LOCKED</h3>
+        <p class="font-bold text-magenta mt-1" style="font-size:0.9rem; letter-spacing:1px;">SEDANG MAINTENANCE...</p>
+        <p class="text-dim text-xs mt-1">// STANDBY //</p>
+      </div>
+    </div>
+
+    <button onclick="mainkanLagu(); switchPage('activate')" class="btn-neon mt-2">
+      <i class="fas fa-bolt"></i> AKTIFKAN SEKARANG
+    </button>
+  </div>
+
+  <!-- ================= AKTIVASI ================= -->
+  <div id="page-activate" class="page">
+    <div class="flex justify-center mb-4 pt-2">
+      <div class="title-pill"><h1>ACTIVATE</h1></div>
+    </div>
+
+    <div class="user-chip">
+      <div class="min-w-0">
+        <p class="name truncate" id="badgeUser2">—</p>
+        <p class="meta truncate" id="badgeInfo2">—</p>
+      </div>
+      <button onclick="logout()" class="btn-mini danger" style="flex-shrink:0;">LOGOUT</button>
+    </div>
+
+    <div class="home-anime-card">
+      <video src="vid.mp4" autoplay loop muted playsinline class="home-anime-video"></video>
+    </div>
+
+    <div class="cyber-card">
+      <h2 class="font-orbitron neon-text text-center mb-5" style="font-size:1rem; font-weight:900; letter-spacing:2px; line-height:1.4;">
+        VERIFIKASI EMAIL<br>
+        <span class="text-magenta" style="text-shadow:0 0 8px rgba(255,0,229,0.8);">PREMIUM 1 TAHUN</span>
+      </h2>
+
+      <label class="cyber-label">EMAIL</label>
+      <input type="email" id="amEmail" class="cyber-input" placeholder="> email@kamu.com" />
+
+      <button onclick="amKirim()" class="btn-neon">
+        <i class="fas fa-paper-plane"></i> KIRIM LINK
+      </button>
+      <p id="amMsg" class="msg-text"></p>
+
+      <div id="amStep2" style="display:none; margin-top:20px;">
+        <label class="cyber-label">LINK VERIFIKASI</label>
+        <input type="text" id="amLink" class="cyber-input" placeholder="> tempel link di sini..." />
+        <button onclick="amVerif()" class="btn-neon">
+          <i class="fas fa-check-double"></i> VERIFIKASI
+        </button>
+        <p id="amMsg2" class="msg-text"></p>
+      </div>
+
+      <div id="amHasil" class="result-box" style="display:none; margin-top:16px;">
+        <p class="font-orbitron text-center mb-3" style="color:#00ff9c; font-weight:900; letter-spacing:2px; text-shadow:0 0 10px rgba(0,255,156,0.8);">
+          ✅ PREMIUM AKTIF!
+        </p>
+        <p id="amResEmail" class="text-center font-bold" style="color:#00ff9c;"></p>
+        <button onclick="ulangiVerifikasi()" class="btn-neon mt-4">
+          <i class="fas fa-rotate"></i> ULANGI
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= INFO ================= -->
+  <div id="page-info" class="page">
+    <div class="flex justify-center mb-4 pt-2">
+      <div class="title-pill"><h1>INFO</h1></div>
+    </div>
+
+    <div class="cyber-card">
+      <h2 class="font-orbitron neon-text text-center mb-4" style="font-size:0.95rem; font-weight:900; letter-spacing:2px;">CHANNEL ADMIN</h2>
+      <a href="https://whatsapp.com/channel/0029VbE0lagJENy1N8bBa31V" target="_blank" class="wa-link">
+        <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
+        <div>
+          <p class="font-orbitron text-cyan text-sm" style="letter-spacing:1.5px;">IKUTI CHANNEL</p>
+          <p class="font-orbitron text-dim text-xs" style="letter-spacing:1px;">// UNTUK UPDATE //</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="cyber-card text-center">
+      <h2 class="font-orbitron neon-text text-center mb-4" style="font-size:0.85rem; font-weight:900; letter-spacing:2px; line-height:1.5;">
+        WAKTU TERUS BERJALAN
+      </h2>
+      <div class="jam-besar" id="jamSekarang">00.00.00</div>
+      <p class="text-dim mt-3" style="font-size:0.85rem; letter-spacing:1px;">// MASA LALU TIDAK BISA DIUBAH //</p>
+      <span class="status-badge">● SISTEM ONLINE</span>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <div class="info-feature-grid">
+      <div class="info-mini-card">
+        <i class="fas fa-bolt info-mini-icon"></i>
+        <h4 class="info-mini-title">CEPAT</h4>
+        <p class="info-mini-desc">antre admin jomblo</p>
+      </div>
+      <div class="info-mini-card">
+        <i class="fas fa-shield-alt info-mini-icon"></i>
+        <h4 class="info-mini-title">AMAN</h4>
+        <p class="info-mini-desc">hati-hati admin wibu</p>
+      </div>
+      <div class="info-mini-card">
+        <i class="fas fa-sync-alt info-mini-icon"></i>
+        <h4 class="info-mini-title">LANGSUNG</h4>
+        <p class="info-mini-desc">premium sebanyak mungkin</p>
+      </div>
+      <div class="info-mini-card">
+        <i class="fas fa-headphones info-mini-icon"></i>
+        <h4 class="info-mini-title">MUSIK</h4>
+        <p class="info-mini-desc">audio stream 24/7</p>
+      </div>
+    </div>
+
+    <div class="cyber-card text-center">
+      <p class="font-orbitron neon-text" style="font-weight:900; letter-spacing:2px;">SELAMAT MENIKMATI ⚡</p>
+      <p class="text-dim text-xs mt-2" style="letter-spacing:1px;">// VERSI BETA //</p>
+    </div>
+  </div>
+
+  <!-- ================= PANEL ADMIN ================= -->
+  <div id="page-admin" class="page">
+    <div class="flex justify-center mb-4 pt-2">
+      <div class="title-pill"><h1>ADMIN</h1></div>
+    </div>
+
+    <div class="cyber-card magenta">
+      <h2 class="font-orbitron text-magenta text-center mb-4" style="font-size:0.95rem; font-weight:900; letter-spacing:2px;">+ BUAT MEMBER</h2>
+
+      <label class="cyber-label">USERNAME</label>
+      <input type="text" id="newUser" class="cyber-input" placeholder="> contoh: budi01" />
+
+      <label class="cyber-label">PASSWORD</label>
+      <input type="text" id="newPass" class="cyber-input" placeholder="> password member" />
+
+      <label class="cyber-label">DURASI (HARI)</label>
+<input type="number" id="newExp" min="0" value="30" class="cyber-input" placeholder="> berapa hari bisa dipakai (0 = tanpa batas)" />
+
+      <label class="cyber-label">KUOTA PREMIUM</label>
+      <input type="number" id="newQuota" min="0" value="1" class="cyber-input" />
+
+      <button onclick="buatMember()" class="btn-neon magenta">
+        <i class="fas fa-user-plus"></i> BUAT AKUN
+      </button>
+      <p id="adminMsg" class="msg-text"></p>
+    </div>
+
+    <div class="cyber-card">
+      <h3 class="font-orbitron neon-text text-center mb-4" style="font-size:0.9rem; font-weight:900; letter-spacing:2px;">DAFTAR MEMBER</h3>
+      <div id="memberList"></div>
+    </div>
+
+    <button onclick="logout()" class="btn-neon danger mt-2">
+      <i class="fas fa-right-from-bracket"></i> LOGOUT
+    </button>
+  </div>
+
+  <!-- ================= NAVIGASI BAWAH ================= -->
+  <nav class="bottom-nav" style="display:none;">
+    <div class="nav-item active" id="nav-home" onclick="mainkanLagu(); switchPage('home')">
+      <i class="fas fa-home nav-icon"></i>
+      <span class="nav-label">HOME</span>
+    </div>
+    <div class="nav-item" id="nav-activate" onclick="mainkanLagu(); switchPage('activate')">
+      <i class="fas fa-bolt nav-icon"></i>
+      <span class="nav-label">AKTIVASI</span>
+    </div>
+    <div class="nav-item" id="nav-info" onclick="mainkanLagu(); switchPage('info')">
+      <i class="fas fa-info-circle nav-icon"></i>
+      <span class="nav-label">INFO</span>
+    </div>
+    <div class="nav-item" id="nav-admin" style="display:none;" onclick="mainkanLagu(); switchPage('admin')">
+      <i class="fas fa-user-shield nav-icon"></i>
+      <span class="nav-label">ADMIN</span>
+    </div>
+  </nav>
+
+   <!-- ================= SCRIPT UTAMA ================= -->
+  <script>
+    const API_URL = "https://api.qsr.web.id";
+    const API_KEY = "qsr";
+    let emailPengguna = "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initAdmin();
+      aturVolume(1);
+      updateMusicUI();
+
+      // Auto-login kalau sesi masih ada & valid
+      const s = getSession();
+      if (s) {
+        const users = getUsers();
+        const u = users.find(x => x.username === s.username);
+        const valid = u && (u.role === 'admin'
+          || !u.expiredAt
+          || new Date(u.expiredAt + 'T23:59:59') >= new Date());
+        if (valid) {
+          masukAplikasi(u);
+        } else {
+          localStorage.removeItem(LS_SESSION);
+        }
+      }
+    });
+
+    function tampilkanJam() {
+      const el = document.getElementById('jamSekarang');
+      if (el) {
+        const d = new Date();
+        el.textContent =
+          String(d.getHours()).padStart(2,'0') + '.' +
+          String(d.getMinutes()).padStart(2,'0') + '.' +
+          String(d.getSeconds()).padStart(2,'0');
+      }
+    }
+    tampilkanJam();
+    setInterval(tampilkanJam, 1000);
+
+    function ulangiVerifikasi() {
+      emailPengguna = "";
+      document.getElementById('amEmail').value = "";
+      document.getElementById('amLink').value = "";
+      document.getElementById('amMsg').textContent = "";
+      document.getElementById('amMsg2').textContent = "";
+      document.getElementById('amStep2').style.display = 'none';
+      document.getElementById('amHasil').style.display = 'none';
+      setTimeout(() => document.getElementById('amEmail')?.focus(), 100);
+    }
+
+    async function amKirim() {
+      const email = document.getElementById('amEmail').value.trim();
+      const msg = document.getElementById('amMsg');
+
+      const akses = cekAkses();
+      if (!akses.ok) { msg.textContent = akses.msg; return; }
+
+      if (!email || !email.includes('@')) {
+        msg.textContent = '⚠️ EMAIL TIDAK VALID!';
+        return;
+      }
+      emailPengguna = email;
+      msg.textContent = '⏳ MENGIRIM...';
+      try {
+        const res = await fetch(`${API_URL}/alight/send?apikey=${API_KEY}&email=${encodeURIComponent(email)}`);
+        const d = await res.json();
+        if (d.status) {
+          msg.textContent = '✅ LINK DIKIRIM! CEK EMAIL';
+          document.getElementById('amStep2').style.display = 'block';
+        } else {
+          msg.textContent = '❌ ' + (d.message || d.error || 'GAGAL — COBA LAGI!');
+        }
+      } catch {
+        msg.textContent = '❌ KONEKSI GAGAL — COBA LAGI!';
+      }
+    }
+
+    async function amVerif() {
+      const link = document.getElementById('amLink').value.trim();
+      const msg = document.getElementById('amMsg2');
+      if (!link) { msg.textContent = '⚠️ MASUKKAN LINK!'; return; }
+
+      const akses = cekAkses();
+      if (!akses.ok) { msg.textContent = akses.msg; return; }
+
+      msg.textContent = '⏳ MEMVERIFIKASI...';
+      try {
+        const res = await fetch(`${API_URL}/alight/verify?apikey=${API_KEY}&email=${encodeURIComponent(emailPengguna)}&link=${encodeURIComponent(link)}`);
+        const d = await res.json();
+        if (d.status) {
+          kurangiKuota();
+          msg.textContent = '✅ BERHASIL!';
+          document.getElementById('amResEmail').textContent = emailPengguna;
+          document.getElementById('amHasil').style.display = 'block';
+        } else {
+          msg.textContent = '❌ ' + (d.message || d.error || 'GAGAL — COBA LAGI!');
+        }
+      } catch {
+        msg.textContent = '❌ KONEKSI GAGAL — COBA LAGI!';
+      }
+    }
+  </script>
+</body>
+</html>
